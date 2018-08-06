@@ -17,7 +17,7 @@ export interface AutocompleteSettings<T> {
     className?: string;
     minLength?: number;
     emptyMsg?: string;
-    onSelect: (item: T, input: HTMLInputElement) => void;
+    onSelect: (item: T, input: HTMLInputElement, itemObject: AutocompleteItem<T>) => void;
     fetch: (text: string, update: (items: Array<AutocompleteItem<T>>) => void) => void;
 }
 
@@ -134,7 +134,7 @@ export function autocomplete<T>(settings: AutocompleteSettings<T>): Autocomplete
             const div = render(item, inputValue);
             if (div) {
                 div.addEventListener("click", function(ev: MouseEvent): void {
-                    settings.onSelect(item.item, input);
+                    settings.onSelect(item.item, input, item);
                     clear();
                     ev.preventDefault();
                     ev.stopPropagation();
@@ -322,7 +322,7 @@ export function autocomplete<T>(settings: AutocompleteSettings<T>): Autocomplete
         }
 
         if (keyCode === Keys.Enter && selected) {
-            settings.onSelect(selected.item, input);
+            settings.onSelect(selected.item, input, selected);
             clear();
         }
     }
